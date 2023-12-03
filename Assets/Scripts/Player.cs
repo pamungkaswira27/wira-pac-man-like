@@ -1,15 +1,23 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField]
     private float _speed;
+    [SerializeField]
+    private float _powerUpDuration;
 
     private Camera _mainCamera;
+    private Coroutine _powerUpCoroutine;
     private Rigidbody _rigidbody;
 
     private Vector3 _horizontalDirection;
     private Vector3 _verticalDirection;
+
+    public Action OnPowerUpStart;
+    public Action OnPowerUpStop;
 
     private void Awake()
     {
@@ -30,6 +38,16 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+    }
+
+    public void PickPowerUp()
+    {
+        if (_powerUpCoroutine != null)
+        {
+            StopCoroutine(_powerUpCoroutine);
+        }
+
+        _powerUpCoroutine = StartCoroutine(StartPowerUp_Coroutine());
     }
 
     private void HideAndLockCursor()
@@ -53,5 +71,12 @@ public class Player : MonoBehaviour
     {
         Vector3 movementDirection = _horizontalDirection + _verticalDirection;
         _rigidbody.velocity = _speed * Time.fixedDeltaTime * movementDirection;
+    }
+
+    private IEnumerator StartPowerUp_Coroutine()
+    {
+        OnPowerUpStart?.Invoke();
+        yield return new WaitForSeconds(_powerUpDuration);
+        OnPowerUpStop?.Invoke();
     }
 }
