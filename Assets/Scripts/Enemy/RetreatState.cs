@@ -19,6 +19,6 @@ public class RetreatState : BaseState
 
     public void ExitState(Enemy enemy)
     {
-        Debug.Log($"[{nameof(RetreatState)}]: Stop Retreating");
+        
     }
 }

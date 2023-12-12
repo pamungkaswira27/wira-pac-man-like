@@ -39,6 +39,6 @@ public class PatrolState : BaseState
 
     public void ExitState(Enemy enemy)
     {
-        Debug.Log($"[{nameof(PatrolState)}]: Stop Patrolling");
+        
     }
 }

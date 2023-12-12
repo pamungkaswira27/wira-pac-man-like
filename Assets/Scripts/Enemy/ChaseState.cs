@@ -24,6 +24,6 @@ public class ChaseState : BaseState
 
     public void ExitState(Enemy enemy)
     {
-        Debug.Log($"[{nameof(ChaseState)}]: Stop Chasing");
+        
     }
 }
