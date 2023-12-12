@@ -270,7 +270,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _chaseDistance: 3
+  _chaseDistance: 5
   _player: {fileID: 0}
   NavMeshAgent: {fileID: 0}
   Animator: {fileID: 0}
