@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,6 +9,12 @@ public class Player : MonoBehaviour
     private float _speed;
     [SerializeField]
     private float _powerUpDuration;
+    [SerializeField]
+    private int _health;
+    [SerializeField]
+    private TMP_Text _healthText;
+    [SerializeField]
+    private Transform _respawnPoint;
 
     private Camera _mainCamera;
     private Coroutine _powerUpCoroutine;
@@ -15,6 +22,8 @@ public class Player : MonoBehaviour
 
     private Vector3 _horizontalDirection;
     private Vector3 _verticalDirection;
+
+    private bool _isPowerUpActive;
 
     public Action OnPowerUpStart;
     public Action OnPowerUpStop;
@@ -28,6 +37,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         HideAndLockCursor();
+        UpdateUI();
     }
 
     private void Update()
@@ -40,6 +50,17 @@ public class Player : MonoBehaviour
         MovePlayer();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (_isPowerUpActive)
+        {
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                collision.gameObject.GetComponent<Enemy>().Dead();
+            }
+        }
+    }
+
     public void PickPowerUp()
     {
         if (_powerUpCoroutine != null)
@@ -48,6 +69,22 @@ public class Player : MonoBehaviour
         }
 
         _powerUpCoroutine = StartCoroutine(StartPowerUp_Coroutine());
+    }
+
+    public void Dead()
+    {
+        _health -= 1;
+
+        if (_health > 0)
+        {
+            transform.position = _respawnPoint.position;
+        }
+        else
+        {
+            _health = 0;
+        }
+
+        UpdateUI();
     }
 
     private void HideAndLockCursor()
@@ -73,10 +110,19 @@ public class Player : MonoBehaviour
         _rigidbody.velocity = _speed * Time.fixedDeltaTime * movementDirection;
     }
 
+    private void UpdateUI()
+    {
+        _healthText.text = $"Health: {_health}";
+    }
+
     private IEnumerator StartPowerUp_Coroutine()
     {
+        _isPowerUpActive = true;
         OnPowerUpStart?.Invoke();
+
         yield return new WaitForSeconds(_powerUpDuration);
+
+        _isPowerUpActive = false;
         OnPowerUpStop?.Invoke();
     }
 }

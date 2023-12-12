@@ -4,7 +4,9 @@ public class RetreatState : BaseState
 {
     public void EnterState(Enemy enemy)
     {
-        Debug.Log($"[{nameof(RetreatState)}]: Start Retreating");
+        if (enemy == null) return;
+
+        enemy.Animator.SetTrigger("RetreatState");
     }
 
     public void UpdateState(Enemy enemy)

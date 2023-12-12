@@ -175,6 +175,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 250
   _powerUpDuration: 5
+  _health: 3
+  _healthText: {fileID: 0}
 --- !u!1 &3888807752281080244
 GameObject:
   m_ObjectHideFlags: 3
